@@ -1,4 +1,4 @@
-const nombre = "juan";
+const nombre = "Luis";
 
 /* nombre = "lucas";  */
 //Definicion de la clase
@@ -38,8 +38,6 @@ const Contadorr3 = new Contadorr()
 Contadorr1.contIncrementa() // ind> 1, glo> 1
 Contadorr1.contIncrementa() // ind> 2, glo> 2
 Contadorr1.contIncrementa() // ind> 2, glo> 2
-Contadorr1.contIncrementa() // ind> 2, glo> 2
-Contadorr2.contIncrementa() // ind> 1, glo> 3
 
 // con1 : ind> 2, glob> 3
 // con2 :
