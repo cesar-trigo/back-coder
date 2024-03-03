@@ -1,8 +1,8 @@
 const Contador = require("./clases");
 
 
-const contadorOeste = new Contador("jose");
-const contadorEste = new Contador("Martin");
+const contadorOeste = new Contador("Martin");
+const contadorEste = new Contador("jose");
 
 
 contadorOeste.contar()
