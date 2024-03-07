@@ -1,7 +1,7 @@
 class ProductManager {
 
   #products;
-  static ID_AUTOINCREMENTABLE = 1;
+  static AUTOINCREMENTING_ID = 1;
 
   constructor() {
     this.#products = [];
@@ -12,7 +12,7 @@ class ProductManager {
     const codeValidator = this.#products.some(e => e.code === code);
 
     !title || !description || !price || !thumbnail || !code || !stock || codeValidator ? console.log(`Not found`)
-      : this.#products.push({ id: ProductManager.ID_AUTOINCREMENTABLE++, title, description, price, thumbnail, code, stock, })
+      : this.#products.push({ id: ProductManager.AUTOINCREMENTING_ID++, title, description, price, thumbnail, code, stock, })
   };
 
 
