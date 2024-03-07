@@ -11,8 +11,12 @@ class ProductManager {
   addProduct = (title, description, price, thumbnail, code, stock) => {
     const codeValidator = this.#products.some(e => e.code === code);
 
-    !title || !description || !price || !thumbnail || !code || !stock || codeValidator ? console.log(`Not found`)
-      : this.#products.push({ id: ProductManager.AUTOINCREMENTING_ID++, title, description, price, thumbnail, code, stock, })
+    if (!title || !description || !price || !thumbnail || !code || !stock) {
+      return console.log("All fields must be filled out")
+    } else {
+      codeValidator ? console.log("Cannot repeat the code")
+        : this.#products.push({ id: ProductManager.AUTOINCREMENTING_ID++, title, description, price, thumbnail, code, stock, })
+    };
   };
 
 
@@ -31,12 +35,12 @@ const ProductManager1 = new ProductManager();
 
 ProductManager1.getProducts();
 
-ProductManager1.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
+/* ProductManager1.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25); */
 //ProductManager1.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "ieie", 25);
 //ProductManager1.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
 
 
-ProductManager1.getProducts();
-
+/* ProductManager1.getProducts();
+ */
 //ProductManager1.getProductById(1)
 //ProductManager1.getProductById(3)
