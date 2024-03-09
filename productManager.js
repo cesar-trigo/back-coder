@@ -20,7 +20,7 @@ class ProductManager {
   };
 
 
-  getProducts = () => console.log(this.#products)
+  getProducts = () => this.#products
 
 
   getProductById = (prodId) => {
