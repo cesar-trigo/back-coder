@@ -25,7 +25,7 @@ class ProductManager {
 
   getProductById = (prodId) => {
     const productoPorId = this.#products.find(e => e.id === prodId);
-    productoPorId ? console.log(productoPorId) : console.log(`Not found`);
+    productoPorId ? productoPorId : console.log(`Not found`);
   };
 
 };
