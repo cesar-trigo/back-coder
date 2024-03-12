@@ -17,8 +17,7 @@ class ProductManager {
       stock: obj.stock,
     };
 
-    if (this.#products.some((product) => product.code == newProducto.code))
-      return "Codigo repetido";
+    if (this.#products.some(product => product.code == newProducto.code)) return "Codigo repetido";
 
     for (const prop in newProducto) {
       if (newProducto[prop] == undefined) {
@@ -33,21 +32,10 @@ class ProductManager {
     return "Producto Cargado con exito";
   }
 
-  /*   addProduct = (title, description, price, thumbnail, code, stock) => {
-    const codeValidator = this.#products.some(e => e.code === code);
-
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
-      return console.log("All fields must be filled out")
-    } else {
-      codeValidator ? console.log("Cannot repeat the code")
-        : this.#products.push({ id: ProductManager.AUTOINCREMENTING_ID++, title, description, price, thumbnail, code, stock, })
-    };
-  }; */
-
   getProducts = () => this.#products;
 
-  getProductById = (prodId) => {
-    const productoPorId = this.#products.find((e) => e.id === prodId);
+  getProductById = prodId => {
+    const productoPorId = this.#products.find(e => e.id === prodId);
     productoPorId ? productoPorId : console.log(`Not found`);
   };
 }
