@@ -9,6 +9,7 @@ class ProductManager {
   addProduct(obj) {
     //configuro el obj
     let newProducto = {
+      id: ProductManager.AUTOINCREMENTING_ID++,
       title: obj.title,
       description: obj.description,
       price: obj.price,
@@ -25,8 +26,6 @@ class ProductManager {
       }
     }
 
-    newProducto.id = ProductManager.idCounter++;
-
     this.#products.push(newProducto);
 
     return "Producto Cargado con exito";
@@ -40,36 +39,48 @@ class ProductManager {
   };
 }
 
+// Nuevas instancias para testear funcionamiento
+
+// Se creo una instancia para poder utilizar los metodos
 const ProductManager1 = new ProductManager();
-
+// Metodo para obtener el array de productos
 ProductManager1.getProducts();
 
-ProductManager1.addProduct(
-  "producto prueba",
-  "Este es un producto prueba",
-  200,
-  "Sin imagen",
-  "abc123",
-  25
-);
-ProductManager1.addProduct(
-  "producto prueba",
-  "Este es un producto prueba",
-  200,
-  "Sin imagen",
-  "ieie",
-  25
-);
-ProductManager1.addProduct(
-  "producto prueba",
-  "Este es un producto prueba",
-  200,
-  "Sin imagen",
-  "abc123",
-  25
+console.log(
+  ProductManager1.addProduct({
+    title: "producto prueba",
+    description: "Este es un producto prueba",
+    price: 200,
+    thumbnail: "Sin imagen",
+    code: "abc12",
+    stock: 25,
+  })
 );
 
-ProductManager1.getProducts();
+/* console.log(
+  ProductManager1.addProduct({
+    title: "producto prueba",
+    description: "Este es un producto prueba",
+    price: 200,
+    thumbnail: "Sin imagen",
+    code: "ieie",
+    stock: 25,
+  })
+);
 
-ProductManager1.getProductById(1);
-ProductManager1.getProductById(3);
+console.log(
+  ProductManager1.addProduct({
+    title: "producto prueba",
+    description: "Este es un producto prueba",
+    price: 200,
+    thumbnail: "Sin imagen",
+    code: "abc12",
+    stock: 25,
+  })
+); */
+
+// Metodo para obtener el array de productos
+console.log(ProductManager1.getProducts());
+// Utilizacion de metodo de busqueda por id
+/* ProductManager1.getProductById(1);
+ProductManager1.getProductById(3); */
