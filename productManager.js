@@ -44,11 +44,32 @@ const ProductManager1 = new ProductManager();
 
 ProductManager1.getProducts();
 
-/* ProductManager1.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25); */
-//ProductManager1.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "ieie", 25);
-//ProductManager1.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
+ProductManager1.addProduct(
+  "producto prueba",
+  "Este es un producto prueba",
+  200,
+  "Sin imagen",
+  "abc123",
+  25
+);
+ProductManager1.addProduct(
+  "producto prueba",
+  "Este es un producto prueba",
+  200,
+  "Sin imagen",
+  "ieie",
+  25
+);
+ProductManager1.addProduct(
+  "producto prueba",
+  "Este es un producto prueba",
+  200,
+  "Sin imagen",
+  "abc123",
+  25
+);
 
-/* ProductManager1.getProducts();
- */
-//ProductManager1.getProductById(1)
-//ProductManager1.getProductById(3)
+ProductManager1.getProducts();
+
+ProductManager1.getProductById(1);
+ProductManager1.getProductById(3);
