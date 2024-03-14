@@ -9,15 +9,17 @@ class ProductManager {
     this.path = "./products.json";
   }
 
+  //PARA LEER EL ACHIVO JSON
   leerArchivo = async () => {
     try {
-      const datos = await fs.readFile(this.path, "utf8"); //hay que arreglar
+      const datos = await fs.readFile(this.path, { encoding: "utf-8" }); //hay que arreglar
       console.log("Contenido del archivo:", datos);
     } catch (error) {
       new Error("Error al leer el archivo:");
     }
   };
 
+  //PARA ACTULIZAR LOS CAMBIOS EN EL ACHIVO JSON
   actualizar = async () => {
     try {
       await fs.promises.writeFile(this.path, JSON.stringify(this.#products, null, 2)); //hay que arreglar
@@ -27,6 +29,7 @@ class ProductManager {
     }
   };
 
+  // METODO PARA AGREGAR PRODUCTOS
   addProduct = async obj => {
     try {
       //configuro el obj
@@ -63,6 +66,7 @@ class ProductManager {
     }
   };
 
+  //METODO PARA LEER LOS PRODUCTOS JSON
   getProducts = async () => {
     try {
       const data = await this.getData();
@@ -72,11 +76,13 @@ class ProductManager {
     }
   };
 
+  // METODO PARA BUSCAR POR ID EN JSON
   getProductById = prodId => {
     const productoPorId = this.#products.find(e => e.id === prodId);
     return productoPorId ? productoPorId : console.log(`Not found`);
   };
 
+  // METODO PARA MODIFICAR POR ID EN PRODUCTOS
   updateProduct = (idProd, obj) => {
     const eventoDelId = this.#products.find(eve => eve.id === idProd);
 
@@ -86,6 +92,7 @@ class ProductManager {
     return console.log(eventoDelId);
   };
 
+  // METODO PARA ELIMINAR POR ID EN PRODUCTOS
   deleteProduct = prodId => {
     const productoPorId = this.#products.findIndex(e => e.id === prodId);
     return productoPorId >= 0 ? this.#products.splice(productoPorId, 1) : console.log(`Not found`);
