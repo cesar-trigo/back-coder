@@ -1,75 +1,162 @@
+const fs = require("fs");
+
 class ProductManager {
   #products;
   static AUTOINCREMENTING_ID = 1;
 
   constructor() {
     this.#products = [];
+    this.path = "./products.json";
   }
 
-  addProduct(obj) {
-    //configuro el obj
-    let newProducto = {
-      title: obj.title,
-      description: obj.description,
-      price: obj.price,
-      thumbnail: obj.thumbnail,
-      code: obj.code,
-      stock: obj.stock,
-    };
-
-    if (this.#products.some(product => product.code == newProducto.code)) return "Codigo repetido";
-
-    for (const prop in newProducto) {
-      if (newProducto[prop] == undefined) {
-        throw new Error(`Falta completar el campo ${prop}`);
-      }
+  //PARA LEER EL ACHIVO JSON
+  leerArchivo = async () => {
+    try {
+      const datos = await fs.readFile(this.path, { encoding: "utf-8" }); //hay que arreglar
+      console.log("Contenido del archivo:", datos);
+    } catch (error) {
+      new Error("Error al leer el archivo:");
     }
+  };
 
-    newProducto.id = ProductManager.idCounter++;
+  //PARA ACTULIZAR LOS CAMBIOS EN EL ACHIVO JSON
+  actualizar = async () => {
+    try {
+      await fs.promises.writeFile(this.path, JSON.stringify(this.#products, null, 2)); //hay que arreglar
+      console.log("Archivo actualizado con éxito.");
+    } catch (error) {
+      console.error("Error al actualizar el archivo:", error);
+    }
+  };
 
-    this.#products.push(newProducto);
+  // METODO PARA AGREGAR PRODUCTOS
+  addProduct = async obj => {
+    try {
+      //configuro el obj
+      let newProduct = {
+        title: obj.title,
+        description: obj.description,
+        price: obj.price,
+        thumbnail: obj.thumbnail,
+        code: obj.code,
+        stock: obj.stock,
+      };
 
-    return "Producto Cargado con exito";
-  }
+      if (this.#products.some(product => product.code === newProduct.code)) {
+        throw new Error("Repeated code");
+      }
 
-  getProducts = () => this.#products;
+      // Verificar que todos los campos estén presentes
+      for (const prop in newProduct) {
+        if (newProduct[prop] === undefined) {
+          throw new Error(`Field missing ${prop}`);
+        }
+      }
 
+      // Asignar un nuevo ID
+      newProduct.id = ProductManager.AUTOINCREMENTING_ID++;
+
+      // Agregar el nuevo producto y actualizar el archivo
+      this.#products.push(newProduct);
+      await this.actualizar();
+
+      return "Product Loaded Successfully";
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  //METODO PARA LEER LOS PRODUCTOS JSON
+  getProducts = async () => {
+    try {
+      const data = await this.getData();
+      return JSON.parse(data);
+    } catch (error) {
+      new Error("Error al leer el archivo:"); //arreglarw
+    }
+  };
+
+  // METODO PARA BUSCAR POR ID EN JSON
   getProductById = prodId => {
     const productoPorId = this.#products.find(e => e.id === prodId);
-    productoPorId ? productoPorId : console.log(`Not found`);
+    return productoPorId ? productoPorId : console.log(`Not found`);
+  };
+
+  // METODO PARA MODIFICAR POR ID EN PRODUCTOS
+  updateProduct = (idProd, obj) => {
+    const eventoDelId = this.#products.find(eve => eve.id === idProd);
+
+    Object.keys(obj).forEach(prop => {
+      eventoDelId[prop] = obj[prop];
+    });
+    return console.log(eventoDelId);
+  };
+
+  // METODO PARA ELIMINAR POR ID EN PRODUCTOS
+  deleteProduct = prodId => {
+    const productoPorId = this.#products.findIndex(e => e.id === prodId);
+    return productoPorId >= 0 ? this.#products.splice(productoPorId, 1) : console.log(`Not found`);
   };
 }
 
+//Object.assign(eventoDelId, obj);
+
+// Nuevas instancias para testear funcionamiento
+
+// Se creo una instancia para poder utilizar los metodos
 const ProductManager1 = new ProductManager();
+// Metodo para obtener el array de productos
+/* ProductManager1.getProducts(); */
 
-ProductManager1.getProducts();
+/* ProductManager1.addProduct({
+  id: 18182,
+  title: "producto prueba",
+  description: "Este es un producto prueba",
+  price: 200,
+  thumbnail: "Sin imagen",
+  code: "ab1c12",
+  stock: 25,
+}); */
 
-ProductManager1.addProduct(
-  "producto prueba",
-  "Este es un producto prueba",
-  200,
-  "Sin imagen",
-  "abc123",
-  25
-);
-ProductManager1.addProduct(
-  "producto prueba",
-  "Este es un producto prueba",
-  200,
-  "Sin imagen",
-  "ieie",
-  25
-);
-ProductManager1.addProduct(
-  "producto prueba",
-  "Este es un producto prueba",
-  200,
-  "Sin imagen",
-  "abc123",
-  25
-);
+const ejecutar = async () => {
+  try {
+    await ProductManager1.addProduct({
+      title: "producto prueba",
+      description: "Este es un producto prueba",
+      price: 200,
+      thumbnail: "Sin imagen",
+      code: "abc12",
+      stock: 25,
+    });
 
-ProductManager1.getProducts();
+    await ProductManager1.addProduct({
+      title: "producto prueba",
+      description: "Este es un producto prueba",
+      price: 200,
+      thumbnail: "Sin imagen",
+      code: "ieie",
+      stock: 25,
+    });
 
-ProductManager1.getProductById(1);
-ProductManager1.getProductById(3);
+    await ProductManager1.getProducts();
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+ejecutar();
+
+// Metodo para obtener el array de productos
+/* console.log(ProductManager1.getProducts()); */
+// Utilizacion de metodo de busqueda por id
+/* console.log(ProductManager1.getProductById(1)); */
+/* ProductManager1.getProductById(3); */
+
+/* ProductManager1.updateProduct(1, {
+  title: "9198198",
+  description: "7827821",
+});
+
+ProductManager1.deleteProduct();
+
+console.log(ProductManager1.getProducts()); */
