@@ -108,16 +108,6 @@ const ProductManager1 = new ProductManager();
 // Metodo para obtener el array de productos
 /* ProductManager1.getProducts(); */
 
-/* ProductManager1.addProduct({
-  id: 18182,
-  title: "producto prueba",
-  description: "Este es un producto prueba",
-  price: 200,
-  thumbnail: "Sin imagen",
-  code: "ab1c12",
-  stock: 25,
-}); */
-
 const ejecutar = async () => {
   try {
     await ProductManager1.addProduct({
@@ -133,7 +123,7 @@ const ejecutar = async () => {
       title: "producto prueba",
       description: "Este es un producto prueba",
       price: 200,
-      thumbnail: "Sin imagen",
+      thumbnail: "prueba imagen",
       code: "ieie",
       stock: 25,
     });
