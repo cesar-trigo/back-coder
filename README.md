@@ -1,4 +1,4 @@
 #Back para coderhouse
 
-se realiso una clase tiket manager
+se realiso productManager
 y...
