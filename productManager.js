@@ -2,27 +2,27 @@ const fs = require("fs");
 
 class ProductManager {
   #products;
-  static AUTOINCREMENTING_ID = 1;
+
+  static #autoIncrementingId = 1;
+  static #lastId = 0;
 
   constructor() {
     this.#products = [];
-    this.path = "./products.json";
+    this.path = "products.json";
   }
 
   //PARA LEER EL ACHIVO JSON
   leerArchivo = async () => {
-    try {
-      const datos = await fs.readFile(this.path, { encoding: "utf-8" }); //hay que arreglar
-      console.log("Contenido del archivo:", datos);
-    } catch (error) {
-      new Error("Error al leer el archivo:");
+    if (fs.existsSync(this.path)) {
+      return JSON.parse(await fs.promises.readFile(this.path, { encoding: "utf-8" })); //hay que arreglar
     }
+    return [];
   };
 
   //PARA ACTULIZAR LOS CAMBIOS EN EL ACHIVO JSON
-  actualizar = async () => {
+  actualizar = async arr => {
     try {
-      await fs.promises.writeFile(this.path, JSON.stringify(this.#products, null, 2)); //hay que arreglar
+      await fs.promises.writeFile(this.path, JSON.stringify(arr, null, 2)); //hay que arreglar
       console.log("Archivo actualizado con éxito.");
     } catch (error) {
       console.error("Error al actualizar el archivo:", error);
@@ -32,6 +32,8 @@ class ProductManager {
   // METODO PARA AGREGAR PRODUCTOS
   addProduct = async obj => {
     try {
+      const data = await this.leerArchivo();
+
       //configuro el obj
       let newProduct = {
         title: obj.title,
@@ -42,7 +44,7 @@ class ProductManager {
         stock: obj.stock,
       };
 
-      if (this.#products.some(product => product.code === newProduct.code)) {
+      if (data.some(product => product.code === newProduct.code)) {
         throw new Error("Repeated code");
       }
 
@@ -54,11 +56,14 @@ class ProductManager {
       }
 
       // Asignar un nuevo ID
-      newProduct.id = ProductManager.AUTOINCREMENTING_ID++;
 
-      // Agregar el nuevo producto y actualizar el archivo
-      this.#products.push(newProduct);
-      await this.actualizar();
+      // Agregar el nuevo producto
+      data.push(newProduct);
+
+      const newId = data.indexOf(obj) + 1;
+      obj.id = newId;
+      //y actualizar el archivo
+      await this.actualizar(data);
 
       return "Product Loaded Successfully";
     } catch (error) {
@@ -69,8 +74,7 @@ class ProductManager {
   //METODO PARA LEER LOS PRODUCTOS JSON
   getProducts = async () => {
     try {
-      const data = await this.getData();
-      return JSON.parse(data);
+      return await this.leerArchivo();
     } catch (error) {
       new Error("Error al leer el archivo:"); //arreglarw
     }
@@ -111,24 +115,14 @@ const ProductManager1 = new ProductManager();
 const ejecutar = async () => {
   try {
     await ProductManager1.addProduct({
-      title: "producto prueba",
-      description: "Este es un producto prueba",
+      title: "testing-1",
+      description: "testing-1",
       price: 200,
-      thumbnail: "Sin imagen",
-      code: "abc12",
+      thumbnail: "testing-1",
+      code: "4457",
       stock: 25,
     });
-
-    await ProductManager1.addProduct({
-      title: "producto prueba",
-      description: "Este es un producto prueba",
-      price: 200,
-      thumbnail: "prueba imagen",
-      code: "ieie",
-      stock: 25,
-    });
-
-    await ProductManager1.getProducts();
+    console.log(await ProductManager1.getProducts());
   } catch (error) {
     console.error(error.message);
   }
