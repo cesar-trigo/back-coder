@@ -5,13 +5,13 @@ class ProductManager {
 
   constructor() {
     this.#products = [];
-    this.path = "products.json";
+    this.path = "products.json"; //--------hay cambiar a una forma correcta!!!
   }
 
   //PARA LEER EL ACHIVO JSON
   readFile = async () => {
     if (fs.existsSync(this.path)) {
-      return JSON.parse(await fs.promises.readFile(this.path, { encoding: "utf-8" }));
+      return JSON.parse(await fs.promises.readFile(this.path, { encoding: "utf-8" })); //--------hay que arreglar!!!
     }
     return [];
   };
@@ -19,7 +19,7 @@ class ProductManager {
   //PARA ACTULIZAR ACHIVO JSON
   sendFile = async arr => {
     try {
-      await fs.promises.writeFile(this.path, JSON.stringify(arr, null, 2)); //hay que arreglar
+      await fs.promises.writeFile(this.path, JSON.stringify(arr, null, 2)); //--------hay que arreglar!!!!
     } catch (error) {
       console.error("Error updating file");
     }
@@ -29,7 +29,9 @@ class ProductManager {
   addProduct = async obj => {
     //arreglar
     try {
-      const data = await this.leerArchivo();
+      const data = await this.readFile();
+
+      /*       newProduct.id = id++; */
 
       //configuro el obj
       let newProduct = {
@@ -53,13 +55,14 @@ class ProductManager {
       }
 
       // Asignar un nuevo ID después de actualizar el archivo
-      let id = data.length;
+      let id = data.length > 0 ? Math.max(...data.map(e => e.id)) + 1 : 1; //--------hay que revisar!!!!
       newProduct.id = id++;
+
       // Agregar el nuevo producto al array de datos
       data.push(newProduct);
 
       //y actualizar el archivo
-      await this.actualizar(data);
+      await this.sendFile(data);
 
       return "Product Loaded Successfully";
     } catch (error) {
@@ -126,26 +129,42 @@ class ProductManager {
     }
   };
 }
-
+ProductManager.contadorIDs = 1;
 const ProductManager1 = new ProductManager();
 
 const ejecutar = async () => {
   try {
     console.log(await ProductManager1.getProducts());
-    // await ProductManager1.addProduct({
-    //   title: "testing-1",
-    //   description: "testing-1",
-    //   price: 200,
-    //   thumbnail: "testing-1",
-    //   code: "4457",
-    //   stock: 25,
-    // });
+    await ProductManager1.addProduct({
+      title: "testing-1",
+      description: "testing-1",
+      price: 200,
+      thumbnail: "testing-1",
+      code: "44tengo asffdasds",
+      stock: 25,
+    });
+    await ProductManager1.addProduct({
+      title: "testing-2",
+      description: "testing-2",
+      price: 200,
+      thumbnail: "testing-2",
+      code: "334",
+      stock: 25,
+    });
+    await ProductManager1.addProduct({
+      title: "testing-2",
+      description: "testing-2",
+      price: 200,
+      thumbnail: "testing-2",
+      code: "445127",
+      stock: 25,
+    });
     // await ProductManager1.addProduct({
     //   title: "testing-2",
     //   description: "testing-2",
     //   price: 200,
     //   thumbnail: "testing-2",
-    //   code: "4457q",
+    //   code: "47ass1q",
     //   stock: 25,
     // });
     // console.log(await ProductManager1.getProductById(1));
@@ -154,7 +173,8 @@ const ejecutar = async () => {
     //   description: "7827821",
     // });
     // await ProductManager1.deleteProduct(2);
-    // console.log(await ProductManager1.getProducts());
+    // await ProductManager1.deleteProduct(3);
+    console.log(await ProductManager1.getProducts());
   } catch (error) {
     console.error(error.message);
   }
